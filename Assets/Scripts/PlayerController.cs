@@ -1,0 +1,43 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerController : MonoBehaviour
+{
+    public float speed = 0;
+    
+    private Rigidbody rb;
+    private int count;
+    private float movementX;
+    private float movementY;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        count = 0;
+    }
+
+    void OnMove(InputValue movementValue)
+    {
+        Vector2 movementVector = movementValue.Get<Vector2>();
+
+        movementX = movementVector.x;
+        movementY = movementVector.y;
+    }
+
+    void FixedUpdate()
+    {
+        // Apply movement based on input
+        Vector3 movement = new Vector3(movementX, 0.0f, movementY); // Replace with actual movement logic
+        rb.AddForce(movement * speed);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+        }
+    }
+}
